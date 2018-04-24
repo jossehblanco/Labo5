@@ -8,6 +8,7 @@ public class Planet {
     int planetID;
     String nombre;
     String desc;
+    boolean isFav = false;
 
     public Planet(int planetID, String nombre, String desc){
         this.planetID = planetID;
@@ -35,4 +36,6 @@ public class Planet {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+    public void setFav(boolean fav){ this.isFav = true;}
+
 }

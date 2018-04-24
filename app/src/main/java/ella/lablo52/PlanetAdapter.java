@@ -1,10 +1,12 @@
 package ella.lablo52;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -33,9 +35,17 @@ public class PlanetAdapter extends RecyclerView.Adapter<PlanetAdapter.PlanetView
     }
 
     @Override
-    public void onBindViewHolder(PlanetAdapter.PlanetViewHolder holder, int position) {
+    public void onBindViewHolder(PlanetAdapter.PlanetViewHolder holder, final int position) {
         holder.tTxt.setText(pLanetList.get(position).getNombre());
         holder.dTxt.setText(pLanetList.get(position).getDesc());
+        holder.btn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                pLanetList.get(position).setFav(true);
+            }
+        });
+
     }
 
     @Override
@@ -45,12 +55,14 @@ public class PlanetAdapter extends RecyclerView.Adapter<PlanetAdapter.PlanetView
 
     protected class PlanetViewHolder extends ViewHolder {
         TextView tTxt, dTxt;
+        ImageButton btn;
 
         public PlanetViewHolder(View itemView) {
             super(itemView);
 
             tTxt = itemView.findViewById(R.id.txt1);
             dTxt = itemView.findViewById(R.id.txt2);
+            btn = itemView.findViewById(R.id.imageButton);
         }
     }
 }
