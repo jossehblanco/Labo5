@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.v7.widget.RecyclerView.*;
@@ -20,6 +22,8 @@ import static android.support.v7.widget.RecyclerView.*;
 public class PlanetAdapter extends RecyclerView.Adapter<PlanetAdapter.PlanetViewHolder> {
     Context con;
     List<Planet> pLanetList;
+    List<Integer> updatedFavs;
+    boolean isFavTab;
 
     public PlanetAdapter(Context con, List<Planet> pLanetList) {
         this.pLanetList = pLanetList;
@@ -36,13 +40,27 @@ public class PlanetAdapter extends RecyclerView.Adapter<PlanetAdapter.PlanetView
 
     @Override
     public void onBindViewHolder(PlanetAdapter.PlanetViewHolder holder, final int position) {
+        updatedFavs = new ArrayList<>();
         holder.tTxt.setText(pLanetList.get(position).getNombre());
         holder.dTxt.setText(pLanetList.get(position).getDesc());
         holder.btn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                pLanetList.get(position).setFav(true);
+
+                if(!pLanetList.get(position).isFav){
+                    pLanetList.get(position).setFav(true);
+                    if(isFavTab) updatedFavs.remove(pLanetList.get(position).getPlanetID());
+                    Toast.makeText(con, "Se cambio el estado a verdadero.", Toast.LENGTH_LONG);
+                }
+                else{
+                    pLanetList.get(position).setFav(false);
+                    if(isFavTab){
+                        updatedFavs.add(pLanetList.get(position).getPlanetID());
+                    }
+                    Toast.makeText(con, "Se cambio el estado a falso.", Toast.LENGTH_LONG);
+                }
+
             }
         });
 
@@ -64,5 +82,26 @@ public class PlanetAdapter extends RecyclerView.Adapter<PlanetAdapter.PlanetView
             dTxt = itemView.findViewById(R.id.txt2);
             btn = itemView.findViewById(R.id.imageButton);
         }
+    }
+
+    public List<Planet> getpLanetList(){
+        return pLanetList;
+    }
+    public void setIsFavTab(boolean x){
+        this.isFavTab = x;
+    }
+
+
+    //para fragmento con todas las series
+    public void updateFavState(List<Integer> id){
+        for(int i = 0; i < id.size(); i++){
+            for(Planet planet:pLanetList){
+                if(planet.getPlanetID() == id.get(i))planet.setFav(false);
+            }
+        }
+
+    }
+    public List<Integer> getUpdatedFavs(){
+        return updatedFavs;
     }
 }

@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ella.lablo52.adapters.ViewPagerAdapter;
@@ -35,19 +36,35 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setText(tabTitles[0]);
         tabLayout.getTabAt(1).setText(tabTitles[1]);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                s2.onResume();
-            }
 
             @Override
             public void onPageSelected(int position) {
+                if(position == 1){
+                    List<Planet> listaDeFavoritos = new ArrayList<>();
 
+                    for(Planet planeta:s1.getPlanetList()){
+                        listaDeFavoritos.add(planeta);
+                    }
+
+                    Iterator<Planet> iter = listaDeFavoritos.iterator();
+                    while(iter.hasNext()){
+                        Planet planet = iter.next();
+                        if(!planet.isFav){
+                            iter.remove();
+                        }
+                    }
+                    s2.updateFavourites(listaDeFavoritos);
+                }else if(position == 2){
+                    s1.getAdapater().updateFavState(s2.getAdapater().getUpdatedFavs());
+                }
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
     }

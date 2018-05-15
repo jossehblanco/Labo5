@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -68,7 +69,6 @@ public class SeriesFragment extends Fragment{
                 Planet paux = p_container.getPlanetList().get(i);
                 if(paux.isFav){
                     l.add(paux);
-
                 }
             }
         }
@@ -78,12 +78,17 @@ public class SeriesFragment extends Fragment{
     }
 
     public List<Planet> getPlanetList(){
-        return planetList;
-    }
-    @Override
-    public void onResume(){
-        getFragmentManager().beginTransaction().replace(R.id.viewPager, this);
-        super.onResume();
 
-     }
+        return adapter.getpLanetList();
+    }
+
+    public void updateFavourites(List<Planet> planetList2){
+        adapter = new PlanetAdapter(getContext(), planetList2);
+        adapter.setIsFavTab(true);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public PlanetAdapter getAdapater(){
+        return adapter;
+    }
 }
